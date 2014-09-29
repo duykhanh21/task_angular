@@ -1,5 +1,3 @@
-'use strict';
-
 angular.module('demoApp').factory('Task', function($resource){
   return $resource('/api/v1/tasks/:taskId');
 });
