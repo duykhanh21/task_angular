@@ -1,20 +1,38 @@
 <div class="row" ng-controller="TasksCtrl">
+  <script type="text/ng-template" id="modal">
+    <div class="modal-header">
+      <h3 class="modal-title">Edit Task</h3>
+    </div>
+    <div class="modal-body">
+      <input ng-model='task.title' type="text" class="input-xlarge" required>
+      <br/>
+      <textarea rows='5' ng-model="task.content" type="text" class="input-xlarge" required></textarea>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" ng-click="update(task.title, task.content)">Update</button>
+      <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+    </div>
+  </script>
   <div class="span5">
-    <form ng-submit="create(title, body)" class='well'>
+    <form ng-submit="create(title, content)" class='well' name="createForm">
     <h3>Tasks</h3>
       <fieldset>
-        <input ng-model='title' type="text" class="input-xlarge" placeholder="Title..." required>
+        <input name='title' ng-model='title' type="text" class="input-xlarge" placeholder="Title..." required minlength='5'>
         <br/>
         <textarea rows='10' ng-model="content" type="text" class="input-xlarge" placeholder="Text..." required></textarea>
         <br/>
+        <div ng-messages="createForm.title.$error">
+          <div ng-message="required">This field is required</div>
+          <div ng-message="minlength">Input is too short</div>
+        </div>
         <button type="submit" class="btn">Submit</button>
       </fieldset>
     </form>
   </div>
 
   <div class="span5 offset2">
-    <div class="well" ng-repeat="task in tasks">
-      <a href="" title="Delete" ng-click="delete($index)" class="pull-right">Delete</a>
+    <div class="well" ng-repeat="task in tasks" ng-click="edit(task)">
+      <a href="" title="Delete" ng-click="delete($index)" onclick='event.cancelBubble = true;'class="pull-right">Delete</a>
       <h3>{{task.title}}</h3>
       <p>{{task.content}}</p>
     </div>
