@@ -3,7 +3,7 @@
 app.factory('Task', function($resource){
   return $resource('/api/v1/tasks/:taskId',
     {taskId: '@id'}, {
-      'update': {method: 'PATCH', params: '@params'}
+      'update': {method: 'PATCH'}
     })
   }
 );
