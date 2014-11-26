@@ -4,12 +4,12 @@
       <h3 class="modal-title">Edit Task</h3>
     </div>
     <div class="modal-body">
-      <input ng-model='task.title' type="text" class="input-xlarge" required>
+      <input ng-model='editedTask.title' type="text" class="input-xlarge" required>
       <br/>
-      <textarea rows='5' ng-model="task.content" type="text" class="input-xlarge" required></textarea>
+      <textarea rows='5' ng-model="editedTask.content" type="text" class="input-xlarge" required></textarea>
     </div>
     <div class="modal-footer">
-      <button class="btn btn-primary" ng-click="update(task.title, task.content)">Update</button>
+      <button class="btn btn-primary" ng-click="update(editedTask)">Update</button>
       <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
     </div>
   </script>
@@ -31,7 +31,12 @@
   </div>
 
   <div class="span5 offset2">
-    <div class="well" ng-repeat="task in tasks" ng-click="edit(task)">
+    <div>
+      <span><a href="" ng-click="predicate = 'title'; reverse=!reverse">Title</a></span>
+      <span><a href="" ng-click="predicate = 'content'; reverse=!reverse">Content</a></span>
+      <span><a href=""></a></span>
+    </div>
+    <div class="well" ng-repeat="task in tasks | orderBy:predicate:reverse" ng-click="edit(task)">
       <a href="" title="Delete" ng-click="delete($index)" onclick='event.cancelBubble = true;'class="pull-right">Delete</a>
       <h3>{{task.title}}</h3>
       <p>{{task.content}}</p>

@@ -24,23 +24,28 @@ app.controller('TasksCtrl', function($scope, $modal, $log, Task){
   };
 
   $scope.edit = function(task){
+    var editedTask = angular.copy(task);
+    var tasks = this.tasks;
     var taskModal = $modal.open({
       templateUrl: "modal",
       size: "lg",
       controller: "taskModalCtrl",
       resolve: {
         task: function(){
-          return task ;
+          return task;
+        },
+        editedTask: function(){
+          return editedTask;
         }
       }
     })
   }
 });
 
-app.controller("taskModalCtrl", function($scope, $modalInstance, task){
-  $scope.task = task;
-  $scope.update = function(title, content){
-    this.task.$update({title: title, content: content}, function(){
+app.controller("taskModalCtrl", function($scope, $modalInstance, editedTask, task){
+  $scope.editedTask = editedTask;
+  $scope.update = function(editedTask){
+    task.$update({title: editedTask.title, content: editedTask.content}, function(){
       $modalInstance.dismiss('cancel');
     });
   }
