@@ -10,15 +10,24 @@ app.factory('Task', function($resource){
 
 app.controller('TasksCtrl', function($scope, $modal, $log, Task){
   $scope.tasks = Task.query();
+  var default_task = {
+    title: "",
+    content: ""
+  }
+  $scope.task = angular.copy(default_task);
 
-  $scope.create = function(title, content){
-    Task.save({title: title, content: content}, function(task){
+  $scope.create = function(new_task){
+    Task.save({title: new_task.title, content: new_task.content}, function(task){
       $scope.tasks.push(task);
+      $scope.task = angular.copy(default_task);
+      $scope.createForm.$setPristine();
+      $scope.submitted = false;
     });
   };
 
-  $scope.delete = function(index) {
-    Task.delete({taskId: $scope.tasks[index].id}, function(){
+  $scope.delete = function(task) {
+    Task.delete({taskId: task.id}, function(){
+      var index = $scope.tasks.indexOf(task);
       $scope.tasks.splice(index, 1);
     });
   };
