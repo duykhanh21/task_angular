@@ -4,37 +4,60 @@
       <h3 class="modal-title">Edit Task</h3>
     </div>
     <div class="modal-body">
-      <input ng-model='task.title' type="text" class="input-xlarge" required>
+      <input ng-model='editedTask.title' type="text" class="input-xlarge" required>
       <br/>
-      <textarea rows='5' ng-model="task.content" type="text" class="input-xlarge" required></textarea>
+      <textarea rows='5' ng-model="editedTask.content" type="text" class="input-xlarge" required></textarea>
     </div>
     <div class="modal-footer">
-      <button class="btn btn-primary" ng-click="update(task.title, task.content)">Update</button>
+      <button class="btn btn-primary" ng-click="update(editedTask)">Update</button>
       <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
     </div>
   </script>
   <div class="span5">
-    <form ng-submit="create(title, content)" class='well' name="createForm">
+    <form ng-submit="create(task)" class='well' name="createForm">
     <h3>Tasks</h3>
       <fieldset>
-        <input name='title' ng-model='title' type="text" class="input-xlarge" placeholder="Title..." required minlength='5'>
-        <br/>
-        <textarea rows='10' ng-model="content" type="text" class="input-xlarge" placeholder="Text..." required></textarea>
-        <br/>
-        <div ng-messages="createForm.title.$error">
-          <div ng-message="required">This field is required</div>
-          <div ng-message="minlength">Input is too short</div>
+        <div class="control-group" >
+          <label class="control-label" for="title">Title</label>
+          <div class="controls">
+            <input name='title' ng-model='task.title' type="text" class="input-xlarge" placeholder="Title..." required minlength='5'>
+            <div ng-messages="createForm.title.$error">
+              <span class="help-inline" ng-message="required">This field is required</span>
+              <span class="help-inline" ng-message="minlength">Input is too short</span>
+            </div>
+          </div>
         </div>
-        <button type="submit" class="btn">Submit</button>
+        <div class="control-group">
+          <label class="control-label" for="content">Content</label>
+          <div class="controls">
+            <textarea rows='10' ng-model="task.content" type="text" class="input-xlarge" placeholder="Text..." required></textarea>
+            <div ng-messages="createForm.content.$error">
+              <span class="help-inline" ng-message="required">This field is required</span>
+            </div>
+          </div>
+        </div>
+        <button type="submit" ng-disabled="createForm.$invalid" class="btn">Submit</button>
       </fieldset>
     </form>
   </div>
 
   <div class="span5 offset2">
-    <div class="well" ng-repeat="task in tasks" ng-click="edit(task)">
-      <a href="" title="Delete" ng-click="delete($index)" onclick='event.cancelBubble = true;'class="pull-right">Delete</a>
+
+    <div class="well">
+      <label for="search" class="col-sm-2 control-label">Search</label>
+      <input type="text" ng-model = "keyword" class="form-control" id="search" placeholder="Search">
+    </div>
+    <br>
+    <div class="well">
+      <span><a href="" ng-click="predicate = 'title'; reverse=!reverse">Title</a></span>
+      <span><a href="" ng-click="predicate = 'content'; reverse=!reverse">Content</a></span>
+      <span><a href="" ng-click="predicate = 'updated_at'; reverse=!reverse">Updated At</a></span>
+    </div>
+    <div class="well" ng-repeat="task in tasks | orderBy:predicate:reverse | filter:keyword" ng-click="edit(task)">
+      <a href="" title="Delete" ng-click="delete(task)" onclick='event.cancelBubble = true;'class="pull-right">Delete</a>
       <h3>{{task.title}}</h3>
       <p>{{task.content}}</p>
+      <span style='float:right;font-size:0.9em;'>{{task.updated_at | date:'medium'}}</span>
     </div>
   </div>
 <div>
